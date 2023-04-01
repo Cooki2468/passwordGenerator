@@ -6,6 +6,7 @@ from tkinter import ttk
 
 root = tk.Tk()
 root.title('Password generator')
+#root['bg'] = 'grey'
 
 
 def generatePassword(length):
@@ -18,7 +19,7 @@ def generatePassword(length):
     random.shuffle(valid_characters)
     random_numbers = []
     password = ''
-
+    
     # Create list with random numbers to later change them to characters
 
     for i in range(length):
@@ -40,8 +41,11 @@ def generatePassword(length):
 
 # Create function that shows generated password
 
-def showGeneratedPassword(text):
-    text['text'] = generatePassword(15)
+def showGeneratedPassword(text, length_entry):
+    length = int(length_entry.get())
+    entry_content = text.get()
+    text.delete(0, length)
+    text.insert(0, generatePassword(length))
 
 
 # Get screen dimensions
@@ -65,15 +69,25 @@ root.resizable(False, False)
 
 root.iconbitmap('favicon.ico')
 
-# Display password and button
+# Display widgets
 
-password_message = tk.Label(root, text='Your generated password will show here')
-password_message.pack()
+password_message = tk.Entry(root)
+
+password_length_label = ttk.Label(root, text="Password length")
+
+password_length_entry = ttk.Entry()
+password_length_entry.insert(0, "12")
+
 generate_password_button = ttk.Button(
     root,
-    text='Generate Password', 
-    command=lambda: showGeneratedPassword(password_message))
+    text='Generate Password',
+    command=lambda: showGeneratedPassword(password_message, password_length_entry))
+
+password_message.pack()
+password_length_label.pack()
+password_length_entry.pack()
 generate_password_button.pack()
+
 
 
 # Keep the window displaying
