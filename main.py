@@ -6,14 +6,14 @@ from tkinter import ttk
 
 root = tk.Tk()
 root.title('Password generator')
-#root['bg'] = 'grey'
+#root['bg'] = '#856ff8'
 
 
 def generatePassword(length):
     # Define valid characters to generate password
 
     letters = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z']
-    symbols = ['!', '@', '#', '$' '%', '^', '&', '*', '(', ')', '_', '-', '+', '=', '<', '>', '?', '/']
+    symbols = ['!', '@', '#', '$' '%', '^', '&', '*', '_', '=', '?', '/']
     numbers = ['1', '2', '3', '4', '5', '6', '7', '8', '9', '0']
     valid_characters = letters + symbols + numbers
     random.shuffle(valid_characters)
@@ -43,8 +43,7 @@ def generatePassword(length):
 
 def showGeneratedPassword(text, length_entry):
     length = int(length_entry.get())
-    entry_content = text.get()
-    text.delete(0, length)
+    text.delete(0, length+1)
     text.insert(0, generatePassword(length))
 
 
@@ -69,26 +68,37 @@ root.resizable(False, False)
 
 root.iconbitmap('favicon.ico')
 
+# Create grid
+
+root.columnconfigure(0, weight=2)
+root.columnconfigure(1, weight=2)
+root.columnconfigure(2, weight=2)
+
 # Display widgets
 
-password_message = tk.Entry(root)
+padding = {'ipadx': 0, 'ipady': 0}
+margin = {'padx': 5, 'pady': 5}
+style = ttk.Style()
 
 password_length_label = ttk.Label(root, text="Password length")
+password_length_label.grid(column=0, row=0, **padding, **margin)
 
-password_length_entry = ttk.Entry()
+password_length_entry = ttk.Entry(root)
 password_length_entry.insert(0, "12")
+password_length_entry.grid(column=1, row=0, **padding, **margin, sticky=tk.E)
+
+password_message_label = ttk.Label(root, text='Your password')
+password_message_label.grid(column=0, row=1, **padding, **margin)
+
+password_message = ttk.Entry(root)
+password_message.grid(column=1, row=1, **padding, **margin, sticky=tk.E)
 
 generate_password_button = ttk.Button(
     root,
     text='Generate Password',
     command=lambda: showGeneratedPassword(password_message, password_length_entry))
 
-password_message.pack()
-password_length_label.pack()
-password_length_entry.pack()
-generate_password_button.pack()
-
-
+generate_password_button.grid(column=1, row=2, sticky=tk.E, **padding, **margin)
 
 # Keep the window displaying
 
